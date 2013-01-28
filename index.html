@@ -1,0 +1,83 @@
+<!doctype html>
+
+<!-- 
+320 and Up by Andy Clarke
+Version: 3.0
+URL: http://stuffandnonsense.co.uk/projects/320andup/
+Apache License: v2.0. http://www.apache.org/licenses/LICENSE-2.0
+-->
+
+<!-- HTML5 Boilerplate -->
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+
+<head>
+<meta charset="utf-8">
+
+<title>The Mobile Smashing Book Template</title>
+<link rel="stylesheet" href="css/320andup-smb.css">
+<link rel="shortcut icon" href="/favicon.ico">
+<meta http-equiv="cleartype" content="on">
+</head>
+
+<body>
+
+<header role="banner" class="clearfix">
+  <h1>Focusing On What Matters In Mobile UX</h1>
+</header>
+
+<div class="content clearfix">
+
+  <p>The mobile web is a harsh environment. Mobile processors are slower than their desktop counterparts. Network connectivity is flaky, bandwidth is low, and latency is high. Touchscreens are less accurate than mice and touch keyboards are slower than desktop physical keyboards. Despite its challenges, <a href="http://www.cisco.com/en/US/solutions/collateral/ns341/ns525/ns537/ns705/ns827/white_paper_c11-520862.html">the mobile web growing at an incredible rate</a>. Mobile web is the new frontier.</p>
+
+  <p>The best mobile web applications are the ones that excel at handling these challenges. When it takes a few seconds to load a page, any shortcoming will be more readily noticed. Patience is already stretched thin, and having to type in <i>one more field</i> can be very frustrating. Mobile users want to get in, get something done, and move on with their life. As a mobile designer, you must build an application that presents no obstacles between your users and their goals.</p>
+
+  <h2>Task-Oriented Design</h2>
+
+  <p>First things first: why are your users here?</p>
+
+  <p>Desktop users keep lots of pages open for long periods of time. Applications like Gmail, Twitter, Facebook, etc., are always open. On the desktop, we like to have everything at our fingertips. On mobile, many of these are replaced with a native apps with push notifications. A user turns to mobile web when they want to accomplish something. They may have clicked a link in their Twitter client, and they want to read the article a friend posted. Maybe they're checking in to a flight, or checking restaurant hours, or a bus schedule. They have a task that they're trying to accomplish, and when they're done their phone is going back in their pocket.</p>
+
+  <p>Let's say you're in charge of Mobile Air's mobile experience. On the desktop, Mobile Air's home page is all about sales. Fare discount advertisements, enticing destinations, and a trip planner are at the forefront. Off in the corner are options for checking in to flights or flight status or rewards program information. This makes sense, because if someone is on a desktop computer they are most likely sitting down at home or at work planning a trip. But what about someone on a phone?</p>
+
+  <p>If you're at home or at work and you want to visit Mobile Air, you're not going to take your phone out of your pocket to do it if a perfectly good laptop is sitting on the coffee table. Visitors to Mobile Air's mobile site are away from home. Odds are, they're traveling right now. The most prominent and accessible tasks should be flight status and check-in. Reservations should be possible but they aren't as high a priority. Already, we've flipped the entire experience on its head because we know more about why our users are here.</p>
+
+  <p>Let's tackle flight check-in. On the desktop application a user must enter their first and last name, plus their confirmation number. Next, they click "Check In", verify their flight, and receive their check in number. The check in number is tricky. Mobile Air's check-in numbers aren't particularly long, but memorizing it for 15 seconds while you switch between your email app and the browser is annoying. Copy and paste is possible but still a bit of a hassle. The best improvement here could be putting a link with an encrypted token in the confirmation email, so that a mobile user can simply click the link and verify their informaiton to check in. No typing!</p>
+
+  <p>Now, what about flight status? We can put a link in the confirmation email as well, but sometimes you're not the one flying, you're the one sitting in the car picking someone up, and all you have is a flight number. For flight status all we want is one field for the flight number, and then possibly a secondary page to choose the leg of the flight. Not so bad.</p>
+
+  <h3>Memory</h3>
+
+  <p>These initial cases are not particularly challenging, it's the next step that takes a bit more effort: repeating an action. Let's say I'm checking flight status repeatedly, I mean, who doesn't? I've been the unfortunate user of a mobile flight status page that used POST data to populate the page. That means when you hit reload you have to confirm rePOSTing the data. This is very confusing to someone who does not know what a POST is, and why they'd even confirm it in the first place. Additionally, mobile browsers throw away page state after being suspended for a while. So, you can re-open that page and not even get that notification, you have to start all over!</p>
+
+  <p>An application should remember as much as it can about a mobile user. Been here before? Here are the flight status numbers you checked recently. Here are links to all the check-in numbers and flight times you have coming up, based on the flight you just checked in to. When you go to add another check-in number, fill in their first and last name with what was there last time. Pre-fill as much as possible. Provide express checkout, because who has the time to type in credit card numbers and billing addresses on a keyboard the size of a business card?</p>
+
+  <h4>Routing</h4>
+  <p>Routes are the most important thing to mobile users. Every page should have its own route, and the application should be able to resume given only that route (and no in-memory state). Additionally, browsing back in the browser's history should function after resuming a session based off a route. This means that any page loaded from the route has to be able to fetch all the data it needs on its own.</p>
+
+  <p>Fetching data for every page quickly presents a common problem. How many times have you thought "why is it loading, I was just here?" You load the front page, click a link, then click back, and the front page is loading again. To a desktop user, this is fine. Loads are fast and fresh data is important. But on mobile, data that's a few seconds old is far preferable to a 1-2 second delay while new data is fetched. The best systems do both: display old data, then seamlessly update it when the new data comes in. That means you need to be caching your data.</p>
+
+  <p>Take it a step further, and leverage HTML5 LocalStorage to cache directly to the user's phone. Pull stale data from the phone's memory, then sync it in the background. Many of these strategies can be abstracted at a deep level of your application, and every page can be built upon a caching system. These small details go a long way.</p>
+
+  <h3>Perceived Speed</h3>
+
+  <p>The hard truth of the mobile world is that it's incredibly hard to deliver content at desktop speeds. Most mobile data providers see ping times on the order of hundreds of milliseconds. That means that assuming it takes 0ms for your application to process a request and 0ms for the phone to handle it and render it (yeah right!) you're still going to have a 300-500ms delay because of the time it takes the signal to travel across the network. The only option left is to cheat.</p>
+
+  <p>Instagram is praised for its user experience, and one of their core tactics is to <a href="https://speakerdeck.com/mikeyk/secrets-to-lightning-fast-mobile-design">perform actions optimisitically</a>. That means, when a user says "post this status update" the system immediately says "OK!" and moves the user back to their page, adding that update. Never mind that the data hasn't even left the phone yet. If your system works just fine 99.9% of the time, tell a white lie and let the user move on. 500ms later when the status is actually posted, the application says nothing. On the rare chance that it fails, retry. On the rare chance that fails, apologize the user and allow them to try again on their own. The speed of an application is determined only by what the user can perceived. An app that feels fast, for all intents and purposes, is fast.</p>
+
+  <p>So, what about fetching data? Clearly we can't fake a success at fetching the next ten article titles, or can we? Anticipating and preloading data can be an incredibly powerful tool for perceived speed. When latency is the worst offender, we'll sacrifice some bandwidth. When we load the front page of our Mobile Air blog, fetch 20 articles from the server. It's just gzipped text and 20 is barely any more than 10, because 90% of that fetch time is latency. Now here's the trick: show 10 titles. When the user clicks "More", fetch the third 10 (21-30) and show the second 10 (11-20) you've had up your sleeve. By the time the user scans the titles, gets to the bottom, and clicks more, you've already got them on deck.</p>
+
+  <p>Take it a step further: load the first paragraph of each article when you fetch the list. Then, when a user clicks an article, show the first paragraph while you fetch the rest. It gives them something to read and they probably can't read a paragraph in a second, so you have time. This kind of prediction takes an app to an incredible level of usability.</p>
+
+
+</div><!-- / content -->
+
+<footer role="contentinfo">
+  <small>Smashing Magazine Template, based on responsive web design boilerplate by <a href="http://stuffandnonsense.co.uk">Andy Clarke</a>.</small>
+  <small>&#8216;320 and Up&#8217; wouldn&#8217;t be possible without <a href="http://html5boilerplate.com/">HTML5 Boilerplate</a>, <a href="http://framelessgrid.com/">Frameless grid</a> and <a href="http://twitter.github.com/bootstrap/">Bootstrap</a>. Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>. The Font Awesome webfont, CSS, and LESS files are licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</small>
+</footer>
+
+</body>
+</html>
