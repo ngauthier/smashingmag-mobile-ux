@@ -44,14 +44,17 @@ Apache License: v2.0. http://www.apache.org/licenses/LICENSE-2.0
 
   <p>If you're at home or at work and you want to visit Mobile Air, you're not going to take your phone out of your pocket to do it if a perfectly good laptop is sitting on the coffee table. Visitors to Mobile Air's mobile site are away from home. Odds are, they're traveling right now. The most prominent and accessible tasks should be flight status and check-in. Reservations should be possible but they aren't as high a priority. Already, we've flipped the entire experience on its head because we know more about why our users are here.</p>
 
-  <p><strong>Rewrite: first talk about the 1-action check in of a returning user. Then the 2-action of filling fields, then 1-action via link.</strong></p>
   <p>Let's tackle flight check-in. On the desktop application a user must enter their first and last name, plus their confirmation number. Next, they click "Check In", verify their flight, and receive their check in number. The check in number is tricky. Mobile Air's check-in numbers aren't particularly long, but memorizing it for 15 seconds while you switch between your email app and the browser is annoying. Copy and paste is possible but still a bit of a hassle. The best improvement here could be putting a link with an encrypted token in the confirmation email, so that a mobile user can simply click the link and verify their informaiton to check in. No typing!</p>
 
-  <p>Your next project is to design the bus schedule pages for Mobile Transit Authority... <strong>first thought: a map with a lookup table with links to routes. second: all the routes on one page. Third: geolocate and show routes with stops near me.</strong>
+
+  <p>Your next project is to design the bus schedule pages for Mobile Transit Authority. The existing desktop page is a large map with routes that you can click on. Immediately this is a problem on mobile: either the map will be too small to have decent touch targets, or there will be a lot of panning and zooming. A simple first solution would be to show the map, then have the links for the routes by name underneath. Or, maybe list all the route schedules on one page so a user can quickly scroll through all the data at once.</p> 
+
+  <p>These solutions are decent adaptations of an existing desktop design, but we need to think about <i>why</i> someone is checking a bus schedule on their phone. We know they're on the go, and it's very likely they are at or near a stop and need to know when the next bus is coming. Let's leverage that information to geolocate our user. Next, find all the stops that pass within one mile (that's 20 minutes walking). Then, promote those stops to the top of the page, along with the route name and the time of the next bus. Now, the majority of our mobile users are going to get exactly what they want without having to do anything but open the page. Provide a simple way to manually modify the address (like Google Maps search geocoding) and then also display all the route info at the bottom of the page. Now we have a task-oriented design.</p>
+
+  <p><strong>mockup of above described design (just the top part, then show the map cut off)</strong></p>
 
   <h2>Memory</h2>
 
-  <p><strong>re-write intro since we've done a repeated action already</strong></p>
   <p>These initial cases are not particularly challenging, it's the next step that takes a bit more effort: repeating an action. Let's say I'm checking flight status repeatedly, I mean, who doesn't? I've been the unfortunate user of a mobile flight status page that used POST data to populate the page. That means when you hit reload you have to confirm rePOSTing the data. This is very confusing to someone who does not know what a POST is, and why they'd even confirm it in the first place. Additionally, mobile browsers throw away page state after being suspended for a while. So, you can re-open that page and not even get that notification, you have to start all over!</p>
 
   <p>An application should remember as much as it can about a mobile user. Have you been to this page before? Here are the flight status numbers you checked recently. Here are links to all the check-in numbers and flight times you have coming up, based on the flight you just checked in to. When you go to add another check-in number, fill in their first and last name with what was there last time. Pre-fill as much as possible. Provide express checkout on a sales site, because who has the time to type in credit card numbers and billing addresses on a keyboard the size of a business card?</p>
@@ -96,6 +99,10 @@ Apache License: v2.0. http://www.apache.org/licenses/LICENSE-2.0
 
   <p>The mobile web is a harsh environment, but you will find that these new constraints provide a clear path to a superior experience, simply by focusing on what matters.</p>
 
+
+  <h2>Nick Gauthier</h2>
+
+  <p><strong>Bio and MBBB promo here</strong></p>
 
 </div><!-- / content -->
 
