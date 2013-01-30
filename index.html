@@ -49,9 +49,11 @@ Apache License: v2.0. http://www.apache.org/licenses/LICENSE-2.0
 
   <p>Your next project is to design the bus schedule pages for Mobile Transit Authority. The existing desktop page is a large map with routes that you can click on. Immediately this is a problem on mobile: either the map will be too small to have decent touch targets, or there will be a lot of panning and zooming. A simple first solution would be to show the map, then have the links for the routes by name underneath. Or, maybe list all the route schedules on one page so a user can quickly scroll through all the data at once.</p> 
 
-  <p>These solutions are decent adaptations of an existing desktop design, but we need to think about <i>why</i> someone is checking a bus schedule on their phone. We know they're on the go, and it's very likely they are at or near a stop and need to know when the next bus is coming. Let's leverage that information to geolocate our user. Next, find all the stops that pass within one mile (that's 20 minutes walking). Then, promote those stops to the top of the page, along with the route name and the time of the next bus. Now, the majority of our mobile users are going to get exactly what they want without having to do anything but open the page. Provide a simple way to manually modify the address (like Google Maps search geocoding) and then also display all the route info at the bottom of the page. Now we have a task-oriented design.</p>
+  <div style="text-align: center;">
+    <img src="img/mobile-transit.jpeg" style="width: 279px; height: auto;">
+  </div>
 
-  <p><strong>mockup of above described design (just the top part, then show the map cut off)</strong></p>
+  <p>These solutions are decent adaptations of an existing desktop design, but we need to think about <i>why</i> someone is checking a bus schedule on their phone. We know they're on the go, and it's very likely they are at or near a stop and need to know when the next bus is coming. Let's leverage that information to geolocate our user. Next, find all the stops that pass within one mile (that's 20 minutes walking). Then, promote those stops to the top of the page, along with the route name and the time of the next bus. Now, the majority of our mobile users are going to get exactly what they want without having to do anything but open the page. Provide a simple way to manually modify the address (like Google Maps search geocoding) and then also display all the route info at the bottom of the page. Now we have a task-oriented design.</p>
 
   <h2>Memory</h2>
 
@@ -59,7 +61,9 @@ Apache License: v2.0. http://www.apache.org/licenses/LICENSE-2.0
 
   <p>An application should remember as much as it can about a mobile user. Have you been to this page before? Here are the flight status numbers you checked recently. Here are links to all the check-in numbers and flight times you have coming up, based on the flight you just checked in to. When you go to add another check-in number, fill in their first and last name with what was there last time. Pre-fill as much as possible. Provide express checkout on a sales site, because who has the time to type in credit card numbers and billing addresses on a keyboard the size of a business card?</p>
 
-  <p><strong>Image of a flight status page with a bunch of suggested tasks from above</strong></p>
+  <div style="text-align: center;">
+    <img src="img/mobile-air.jpeg" style="width: 304px; height: auto;">
+  </div>
 
   <h3>Routing</h3>
   <p>Routes are the most important thing to mobile users, even though they never look at them. Every page should have its own route, and the application should be able to resume given only that route (and no in-memory state). Additionally, browsing back in the browser's history should function after resuming a session based off a route. This means that any page loaded from the route has to be able to fetch all the data it needs on its own.</p>
@@ -72,9 +76,11 @@ Apache License: v2.0. http://www.apache.org/licenses/LICENSE-2.0
 
   <p>The hard truth of the mobile world is that it's incredibly difficult to deliver content at desktop speeds. Most mobile data providers see ping times on the order of hundreds of milliseconds. That means that assuming it takes 0ms for your application to process a request and 0ms for the phone to handle it and render it (yeah right!) you're still going to have a 300-500ms delay because of the time it takes the signal to travel across the network. The only option left is to cheat.</p>
 
-  <p><strong>image of a request interaction with latency, server processing time, client processing time</strong></p>
-
   <p>Instagram is praised for its user experience, and one of their core tactics is to <a href="https://speakerdeck.com/mikeyk/secrets-to-lightning-fast-mobile-design">perform actions optimisitically</a>. That means, when a user says "post this status update" the system immediately says "done!" and moves the user back to their timeline, adding the new photo. Never mind that the data hasn't even left the phone yet. In reality, your photo was on Instagram's servers before you hit OK, and it was on your timeline before the server confirmed it. A double whammy of perceived speed!.</p>
+
+  <div style="text-align: center;">
+    <img src="img/sequence.jpeg" style="width: 796px; height: auto;">
+  </div>
 
   <p>If your system works just fine 99.9% of the time, tell a white lie and let the user move on. 500ms later when the status is actually posted, the application says nothing because the action was performed as expected. On the rare chance that it fails, retry. On the rare chance the retry fails, apologize the user and allow them to try again on their own. The speed of an application is determined only by what the user perceives. An app that <strong>feels</strong> fast, for all intents and purposes, <strong>is</strong> fast.</p>
 
@@ -82,7 +88,10 @@ Apache License: v2.0. http://www.apache.org/licenses/LICENSE-2.0
 
   <p>So, what about fetching data? Clearly we can't fake a success at fetching the next ten article titles, or can we? Anticipating and prefetching data can be an incredibly powerful tool for perceived speed. When latency is the worst offender, we'll sacrifice some bandwidth. When we load the front page of our Mobile News Blog, fetch 20 articles from the server. It's just gzipped text and 20 is barely any more than 10, because 90% of that fetch time is latency. Now here's the trick: show 10 titles. When the user clicks "More", fetch the third 10 (21-30) and show the second 10 (11-20) you've had up your sleeve. By the time the user scans the titles, gets to the bottom, and clicks more, you've already got them on deck.</p>
 
-  <p><strong>Diagram of 20 loaded, 10 displayed, then 20 displayed, 30 loaded</strong></p>
+  <div style="text-align: center;">
+    <img src="img/mobile-news.jpeg" style="width: 727px; height: auto;">
+  </div>
+
 
   <p>Take it a step further: load the first paragraph of each article when you fetch the list. Then, when a user clicks an article, show the first paragraph while you fetch the rest. It gives them something to read and they probably can't read a paragraph in a second, so you have time. This kind of prediction takes an app to an incredible level of usability.</p>
 
@@ -100,9 +109,15 @@ Apache License: v2.0. http://www.apache.org/licenses/LICENSE-2.0
   <p>The mobile web is a harsh environment, but you will find that these new constraints provide a clear path to a superior experience, simply by focusing on what matters.</p>
 
 
-  <h2>Nick Gauthier</h2>
+  <h2>About the Author</h2>
 
-  <p><strong>Bio and MBBB promo here</strong></p>
+  <img src="img/ngauthier.jpg" style="width: 155px; height: auto; float: left; margin-right: 20px">
+
+  <p>
+    <a href="http://ngauthier.com">Nick Gauthier</a> is a web freelancer focusing on Ruby on Rails and JavaScript. His experience spans from SQL to Sass and he always tests, all the time.
+    He recently released his newest eBook <a href="http://mobilebbbook.com">Mobile Web Patterns with Backbone.js</a>, and before that he wrote <a href="http://recipeswithbackbone.com">Recipes with Backbone</a> with <a href="http://japhr.blogspot.com/">Chris Strom</a>.
+    Aside from freelancing Nick runs <a href="http://bmoreaweso.me">B’More Awesome</a>, a Baltimore-based web training organization, and he also co-founded <a href="http://exobrain.co">Exobrain</a>, an online mind-mapping tool.
+  </p>
 
 </div><!-- / content -->
 
