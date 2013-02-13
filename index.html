@@ -45,22 +45,59 @@ Apache License: v2.0. http://www.apache.org/licenses/LICENSE-2.0
 
   <h2>Memory</h2>
 
-  <p><strong>Users has visited and checked in. What do we know about them? We know they have a flight coming up. We know who they are and probably have more flight info in our system (at least the return trip). Let's change their home page. If we know about an upcoming flight, show that flight's info.</strong></p>
+  <p>Once a user has visited our site and checked in to a flight, we know a lot more about them. We know that they have a flight coming up, for starters. Also, we know who they are and we may have more information in our database, like past and future flights. Using this information, let's customize the home page specifically for them by anticipating their actions.</p>
 
-  <p>Now that our users have visited the site and checked-in to a flight, we know more about them. We know who they are and we know where and when they are flying. We may know even more about them, like their return flight. If they are a frequent customer and have an account, we may know about other flights they've reserved. We can now customize the interface with this new information.</p>
+  <p>Let's say we know that Ann has checked in to her flight that leaves tomorrrow from NYC to SFO. We also know she's returning from SFO to NYC a few days later, and two weeks after that she's taking a trip to the Bahamas. Here's how we could display her homepage:</p>
 
-  <p><strong>Updated version of this mockup. Show upcoming flight, return flight, then a future unrelated flight with a check in button.</strong></p>
+  <p><strong>Updated version of this mockup. Show upcoming flight (w/ status), return flight (status and checkin button), then a future unrelated flight (disabled checkin w/ checkin opening date).</strong></p>
   <div style="text-align: center;">
     <img src="img/mobile-air.jpeg" style="width: 304px; height: auto;">
   </div>
 
   <p>So, how should we store this data? We could store it on the server in a database, and then use a cookie on the client. That's the usual way to store this kind of thing. However, this is really a mobile-only interface and it's going to be short lived; once the user has completed their flights they don't need this interface any more. Additionally, storing the data on the server means that it's not available if wifi is lost (like when you're in-flight and your phone is in airplane mode). Here's an implementation of a flight-information cache using HTML5 LocalStorage:</p>
 
-  <p><strong>Code example of storing flight info in local storage. Fetch on the server if possible.</strong></p>
+  <pre><code>
+    // After we fetch from the server, store it:
+    localStorage.setItem("flights", JSON.stringify([
+      { from: "NYC", to: "SFO", at: "Sun Jan 1 2012 07:45:00 GMT-0500 (EST)" },
+      { from: "SFO", to: "NYC", at: "Tue Jan 3 2012 16:00:00 GMT-0500 (PDT)" }
+    ]));
+
+    // When we first open the page but before fetching from server, retrieve the data:
+    flights = localStorage.getItem("flights")
+    if (flights) {
+      flights = JSON.parse(flights);
+      restoreFlights(flights);
+    }
+  </code></pre>
 
   <p>This will store flight information on the phone, but we still would not be able to open the application if we don't have wifi. That's what HTML5 Application Cache Manifests are for. A cache manifest will tell the phone what files it can download and use offline. When the phone has internet, it will update these files. Here's a simple cache for our application:</p>
 
-  <p><strong>HTML5 cache manifest for a one-html app, js, css, and images.</strong></p>
+  <p>First, add the manifest to the html tag</p>
+
+  <pre><code>
+    &lt;html manifest="/manifest.mf"&gt;
+  </code></pre>
+
+  <p>Next, add the manifest:</p>
+
+  <pre><code>
+    CACHE MANIFEST
+    # 2013-02-14
+    # v1
+
+    # Primary assets
+    /favicon.ico
+    index.html
+    application.css
+    application.js
+    images/mobile-air.jpg
+
+    NETWORK:
+    /api
+  </code></pre>
+
+  <p>This manifest tells the browser that it should cache our core application assets, but that all our api methods require the network. That way our api data won't be cached. Note at the top we have a timestamp and version number. Any change to the manifest will trigger a cache update, so whenever you ship a new version, just update the timestamp and/or version accordingly and the next time a user is online they'll get a fresh version.</p>
 
 
   <h3>Routing</h3>
@@ -68,7 +105,29 @@ Apache License: v2.0. http://www.apache.org/licenses/LICENSE-2.0
 
   <p>Any page that stands alone should have its own route, and it should be able to be loaded purely by opening that route. Meaning that we must be able to reconstruct our application state without having to start at the main page and then navigate back to where we were. To do this, we will need a router. You could build one yourself, but there are many great JavaScript routers available in different frameworks. Here's a router in Backbone.js:</p>
 
-  <p><strong>Show Backbone router that just has commented route action (e.g. "show flight here")</strong></p>
+  <pre><code>
+    // Define the router
+    var MobileAirRouter = Backbone.Router.extend({
+      routes: {
+        "": "dashboard",
+        "flights/:id": "flight"
+      },
+      dashboard: function() {
+        // Display the main dashboard
+      },
+      flight: function(id) {
+        // Fetch flight with ID: id
+        // Display flight info
+      }
+    });
+
+    // Instantiate it
+    var router = new MobileAirRouter();
+
+    // Start Backbone's history tracking
+    Backbone.history.start()
+    // That will trigger whichever route matches the current url
+  </code></pre>
 
   <p>Combine a router with a LocalStorage-backed cache system, and you have an application that can resume <i>very</i> quickly, even without wifi access.</p>
 
@@ -82,11 +141,53 @@ Apache License: v2.0. http://www.apache.org/licenses/LICENSE-2.0
 
   <p><strong>mock-up of these five screens</strong></p>
   
-  <p>When a user has picked airports and dates, but <i>before</i> they have hit the "Find Flights" button, we will fetch the first leg info. This means that if they change those values a few times it could incur an extra data cost, but it also means that the next page will appear almost immediately. Here's how we can simply pre-fetch a page:</p>
+  <p>When a user has picked airports and dates, but <i>before</i> they have hit the "Find Flights" button, we will fetch the first leg info. This means that if they change those values a few times it could incur an extra data cost, but it also means that the next page will appear almost immediately. Here's how we can pre-fetch a page:</p>
 
-  <p><strong>show how to fetch via ajax and keep the deferred object so that if it's fetched again it waits for the original. jQuery + JavaScript code.</strong></p>
+  <pre><code>
+  // Function to fetch flight legs
+  var fetchFlightLegs = function() {
+    // Inside a closure, we keep some internal variables
+    var key, deferred;
 
-  <p>In our design, the first and second leg selection are different screens, but that doesn't mean they have to be separate requests. We'll lump it into one request to get both the first and second date. That way the transition is instant. Entering payment requires no fetching, so that is easy. When the payment is POSTed to the server, we will do it synchronously with a loading screen. We don't want to assume success at this step. Plus, an uncannily quick response could actually make our users uneasy! Here's what our request chain looks like with and without pre-fetching data:</p>
+    // Return the actual fetchFlightLegs function
+    return function(from, to, on, until) {
+      // Make a key from the arguments, so that different
+      // invocations restart the process
+      var newKey = [arguments].join("-");
+
+      // If it's not redundant request, make a new request
+      if (newKey !== key) {
+        // Set the key
+        key = newKey
+        // And set the deferred to the new request
+        deferred = $.get("/legs", {
+          from: from,
+          to: to,
+          on: on,
+          until: until
+        });
+      }
+      // Return the deferred
+      return deferred;
+    }
+  }();
+
+  // Now every time they change a field, we run:
+  fetchFlightLegs(from, to, on, until);
+
+  // Then, when they hit "next", we run it again
+  // But this time we use the results to render the page
+  fetchFlightLegs(from, to, on, until).done(function() {
+    // render the legs page
+  });
+
+  // If the fields hadn't changed, we piggyback on the current request, which
+  // has been in progress since they updated the fields
+  </code></pre>
+
+  <p>So as not to rack up huge data costs, we may want to wrap our calls in something like <code>_.debounce</code> from <a href="http://underscorejs.org/#debounce">Underscore.js</a> which will delay a function call up to X milliseconds, and renew the delay if the function is called again. Basically, it lets the application "settle down" before performing the fetch.</p>
+
+  <p>In our design, the first and second leg selection are different screens, but that doesn't mean they have to be separate requests. We can modify our <code>fetchFlightLegs</code> function to lump it into one request to get both the first and second legs. That way the transition is instant from the first to the second. Entering payment requires no fetching. When the payment is POSTed to the server, we will do it synchronously with a loading screen. We don't want to assume success at this step. Plus, an uncannily quick response could actually make our users uneasy! Here's what our request chain looks like with and without pre-fetching data:</p>
 
   <p><strong>Change this mock-up to be for flight reservations. 1) fetch flights when airports or date changes, so when they hit "View Flights" it has already been retrieved. 2) combine first and second leg fetches. 3) When you enter payment and hit reserve, do it synchronously because this should not be done without permission.</strong></p>
   <div style="text-align: center;">
