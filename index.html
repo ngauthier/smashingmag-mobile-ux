@@ -40,7 +40,8 @@ Apache License: v2.0. http://www.apache.org/licenses/LICENSE-2.0
 
   <p>Let's say you're in charge of Mobile Air's mobile experience. On the desktop, Mobile Air's home page is all about sales. Fare discount advertisements, enticing destinations, and a trip planner are at the forefront. Off in the corner are options for checking in to flights or flight status or rewards program information. This makes sense, because if someone is on a desktop computer they are most likely sitting down at home or at work planning a trip. But what about someone on a phone?</p>
 
-  <p><strong>Mock-up of desktop with sales at the forefront and check-in and status on the side. Mock-up of mobile with status and checkin at the top, and reservations below.</strong></p>
+  <img src="img/desktop.jpg" style="width:825px;">
+  <img src="img/mobile.jpg" style="width:454px;">
   <p>If you're at home or at work and you want to visit Mobile Air, you're not going to take your phone out of your pocket to do it if a perfectly good laptop is sitting on the coffee table. Visitors to Mobile Air's mobile site are away from home. Odds are, they're traveling right now. The most prominent and accessible tasks should be flight status and check-in. Reservations should be possible but they aren't as high a priority. Already, we've flipped the entire experience on its head because we know more about why our users are here.</p>
 
   <h2>Memory</h2>
@@ -49,9 +50,8 @@ Apache License: v2.0. http://www.apache.org/licenses/LICENSE-2.0
 
   <p>Let's say we know that Ann has checked in to her flight that leaves tomorrrow from NYC to SFO. We also know she's returning from SFO to NYC a few days later, and two weeks after that she's taking a trip to the Bahamas. Here's how we could display her homepage:</p>
 
-  <p><strong>Updated version of this mockup. Show upcoming flight (w/ status), return flight (status and checkin button), then a future unrelated flight (disabled checkin w/ checkin opening date).</strong></p>
   <div style="text-align: center;">
-    <img src="img/mobile-air.jpeg" style="width: 304px; height: auto;">
+    <img src="img/dashboard.jpg" style="width: 638px;">
   </div>
 
   <p>So, how should we store this data? We could store it on the server in a database, and then use a cookie on the client. That's the usual way to store this kind of thing. However, this is really a mobile-only interface and it's going to be short lived; once the user has completed their flights they don't need this interface any more. Additionally, storing the data on the server means that it's not available if wifi is lost (like when you're in-flight and your phone is in airplane mode). Here's an implementation of a flight-information cache using HTML5 LocalStorage:</p>
@@ -139,7 +139,7 @@ Apache License: v2.0. http://www.apache.org/licenses/LICENSE-2.0
 
   <p>Let's apply this concept to our mobile reservation system. We're going to have five pages: entering airports and dates, pick the first leg, pick the second leg, payment, and confirmation.</p>
 
-  <p><strong>mock-up of these five screens</strong></p>
+  <img src="img/reservation.jpg" style="width:825px">
   
   <p>When a user has picked airports and dates, but <i>before</i> they have hit the "Find Flights" button, we will fetch the first leg info. This means that if they change those values a few times it could incur an extra data cost, but it also means that the next page will appear almost immediately. Here's how we can pre-fetch a page:</p>
 
@@ -191,7 +191,7 @@ Apache License: v2.0. http://www.apache.org/licenses/LICENSE-2.0
 
   <p><strong>Change this mock-up to be for flight reservations. 1) fetch flights when airports or date changes, so when they hit "View Flights" it has already been retrieved. 2) combine first and second leg fetches. 3) When you enter payment and hit reserve, do it synchronously because this should not be done without permission.</strong></p>
   <div style="text-align: center;">
-    <img src="img/sequence.jpeg" style="width: 796px; height: auto;">
+    <img src="img/sequence.jpg" style="width: 825px;">
   </div>
 
   <p>As you can see, we've parallelized the application with the user's actions. The user can be doing what they need to do (picking dates, picking flights) at the same time the application can predictively load the next page's information. This takes a lot of waiting out of the equation.</p>
